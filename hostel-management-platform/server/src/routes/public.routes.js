@@ -314,9 +314,10 @@ router.post('/booking-request', async (req, res) => {
     bed.reservationStatus = 'Reserved';
     await bed.save();
 
-    // Emit Socket event to update the public website in real-time
-    const io = req.app.get('socketio');
+    // Emit Socket event to update the public website & admin dashboard in real-time
+    const io = req.app.get('io') || req.app.get('socketio');
     if (io) {
+      io.emit('ERP_EVENT', { type: 'BOOKING_REQUEST', payload: { roomNumber: preferredRoom, bedNumber: preferredBed } });
       io.emit('BED_RESERVED', {
         roomNumber: preferredRoom,
         bedNumber: preferredBed,

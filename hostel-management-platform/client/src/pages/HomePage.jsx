@@ -141,12 +141,16 @@ const HomePage = ({ onOpenAuth, onOpenMess, onOpenRenewRent }) => {
     fetchLiveDatabaseData();
 
     // Socket.IO real-time auto-synchronization (no page refresh required)
-    const socket = io('https://s3elite.onrender.com', { transports: ['polling'] });
-    socket.on('ERP_EVENT', (event) => {
-      console.log('[Socket.IO] Public website synchronizing live MongoDB update:', event?.type);
+    const socket = io({ transports: ['polling', 'websocket'] });
+    
+    const handleSync = (event) => {
+      console.log('[Socket.IO] Public website synchronizing live MongoDB update:', event);
       fetchLiveDatabaseData();
       setLastRefreshed(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
-    });
+    };
+
+    socket.on('ERP_EVENT', handleSync);
+    socket.on('BED_RESERVED', handleSync);
 
     // Cross-tab broadcast listener
     const unsubscribe = realtimeBus.subscribe(() => {

@@ -192,12 +192,14 @@ const OwnerDashboard = () => {
   useEffect(() => {
     fetchDashboardData();
 
-    // Connect to backend Socket.IO
-    const socket = io('https://s3elite.onrender.com', { transports: ['polling'] });
-    socket.on('ERP_EVENT', (data) => {
-      console.log('[Socket.IO] Real-Time MongoDB update received:', data);
+    // Connect to backend Socket.IO dynamically
+    const socket = io({ transports: ['polling', 'websocket'] });
+    const handleSync = (data) => {
+      console.log('[Socket.IO] Real-Time MongoDB update received in Dashboard:', data);
       fetchDashboardData(true);
-    });
+    };
+    socket.on('ERP_EVENT', handleSync);
+    socket.on('BED_RESERVED', handleSync);
 
     // Also subscribe to local realtimeBus
     const unsubscribe = realtimeBus.subscribe(() => {

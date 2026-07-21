@@ -92,7 +92,7 @@ const AdminBedManagementDrawer = ({ bedId, onClose, onBedUpdated }) => {
   useEffect(() => {
     fetchBedDetails();
     
-    const socket = io('https://s3elite.onrender.com', { transports: ['polling'] });
+    const socket = io({ transports: ['polling', 'websocket'] });
     socket.on('ERP_EVENT', () => {
       fetchBedDetails();
     });

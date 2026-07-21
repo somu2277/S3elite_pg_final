@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { realtimeBus } from '../utils/realtimeBus';
 import {
   User as UserIcon,
   Phone,
@@ -123,6 +124,7 @@ const AuthPage = ({ selectedRoomCot = null, onCancel }) => {
       
       const json = await res.json();
       if (res.ok && json.success) {
+        realtimeBus.notify();
         setBookingSuccess(true);
       } else {
         setError(json.message || 'Booking failed. Bed might no longer be available.');
