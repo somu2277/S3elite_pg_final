@@ -1,0 +1,32 @@
+services:
+  # Backend Server
+  - type: web
+    name: smart-hostel-api
+    env: node
+    rootDir: hostel-management-platform/server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      # NOTE: You will need to add these secret environment variables directly in the Render Dashboard
+      - key: MONGO_URI
+        sync: false 
+      - key: JWT_SECRET
+        sync: false 
+        
+  # Frontend Client
+  - type: web
+    name: smart-hostel-client
+    env: static
+    rootDir: hostel-management-platform/client
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: smart-hostel-api
+          envVarKey: RENDER_EXTERNAL_URL
