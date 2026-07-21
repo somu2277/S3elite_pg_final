@@ -192,8 +192,9 @@ const OwnerDashboard = () => {
   useEffect(() => {
     fetchDashboardData();
 
-    // Connect to backend Socket.IO dynamically
-    const socket = io({ transports: ['polling', 'websocket'] });
+    // Connect to backend Socket.IO directly on Render
+    const RENDER_BACKEND_URL = 'https://s3elite-pg-final.onrender.com';
+    const socket = io(RENDER_BACKEND_URL, { transports: ['polling', 'websocket'] });
     const handleSync = (data) => {
       console.log('[Socket.IO] Real-Time MongoDB update received in Dashboard:', data);
       fetchDashboardData(true);

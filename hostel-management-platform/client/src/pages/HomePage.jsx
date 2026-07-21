@@ -140,8 +140,9 @@ const HomePage = ({ onOpenAuth, onOpenMess, onOpenRenewRent }) => {
   useEffect(() => {
     fetchLiveDatabaseData();
 
-    // Socket.IO real-time auto-synchronization (no page refresh required)
-    const socket = io({ transports: ['polling', 'websocket'] });
+    // Socket.IO real-time auto-synchronization (direct Render backend connection)
+    const RENDER_BACKEND_URL = 'https://s3elite-pg-final.onrender.com';
+    const socket = io(RENDER_BACKEND_URL, { transports: ['polling', 'websocket'] });
     
     const handleSync = (event) => {
       console.log('[Socket.IO] Public website synchronizing live MongoDB update:', event);

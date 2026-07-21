@@ -92,7 +92,8 @@ const AdminBedManagementDrawer = ({ bedId, onClose, onBedUpdated }) => {
   useEffect(() => {
     fetchBedDetails();
     
-    const socket = io({ transports: ['polling', 'websocket'] });
+    const RENDER_BACKEND_URL = 'https://s3elite-pg-final.onrender.com';
+    const socket = io(RENDER_BACKEND_URL, { transports: ['polling', 'websocket'] });
     socket.on('ERP_EVENT', () => {
       fetchBedDetails();
     });

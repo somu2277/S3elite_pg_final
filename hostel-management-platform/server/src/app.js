@@ -17,10 +17,11 @@ const path = require('path');
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+app.use(cors({ origin: '*', credentials: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
-app.use('/api/uploads', express.static(path.join(__dirname, '../uploads'))); // Fallback for Vercel /api/ proxy
+app.use('/api/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Initialize automated rent reminder scheduler
 startPaymentReminderJobs();
