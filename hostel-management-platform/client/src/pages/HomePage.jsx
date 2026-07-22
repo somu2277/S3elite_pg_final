@@ -190,7 +190,18 @@ const HomePage = ({ onOpenAuth, onOpenMess, onOpenRenewRent }) => {
     ...block,
     rooms: block.rooms.filter((room) => {
       if (!searchQuery.trim()) return true;
-      const q = searchQuery.toLowerCase();
+      const q = searchQuery.trim().toLowerCase();
+      const roomId = room.id ? room.id.toLowerCase() : '';
+      const displayId = room.id ? room.id.replace('SB', 'S').toLowerCase() : '';
+      const floorName = block.floorName ? block.floorName.toLowerCase() : '';
+      const sharingStr = `${room.sharing || ''} sharing`;
+
+      return (
+        roomId.includes(q) ||
+        displayId.includes(q) ||
+        floorName.includes(q) ||
+        sharingStr.includes(q)
+      );
     })
   })).filter((block) => block.rooms.length > 0 && block.floorName !== 'Special Block');
 
